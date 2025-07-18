@@ -1,3 +1,4 @@
+
 create table products (
 product_id int primary key,
 product_name VARCHAR(100),
