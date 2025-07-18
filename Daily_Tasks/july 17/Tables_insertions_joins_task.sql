@@ -1,52 +1,19 @@
+--Tables & Insert Statements
+
 CREATE DATABASE simple_sql;
-
 USE simple_sql;
- 
-CREATE TABLE employees (
 
-    emp_id INT PRIMARY KEY,
+/*
+1. departments Table
 
-    emp_name VARCHAR(100),
+CREATE TABLE departments ( ); dept id INT PRIMARY KEY, dept name VARCHAR(100)
 
-    department VARCHAR(50),
+INSERT INTO departments VALUES
 
-    salary INT,
+(1, 'Human Resources'), (2, 'Engineering'), (3, 'Marketing');
 
-    age INT
+*/
 
-);
- 
-INSERT INTO employees VALUES
-
-(1, 'Amit', 'HR', 30000, 25),
-
-(2, 'Neha', 'IT', 45000, 28),
-
-(3, 'Rahul', 'IT', 50000, 30),
-
-(4, 'Divya', 'Sales', 40000, 26),
-
-(5, 'Kiran', 'Sales', 35000, 24),
-
-(6, 'Meena', 'HR', 32000, 29);
-
- select * from employees
-where salary > (
-select avg(salary) from employees
-);
-
-SELECT dept_avg.department, dept_avg.avg_salary
-FROM (
-    SELECT department, AVG(salary) AS avg_salary
-    FROM employees
-    GROUP BY department
-) AS dept_avg;
-
-select emp_name, department, salary,
-rank() over (order by salary desc) as salary_rank
-from employees;
-
-drop table department;
 CREATE TABLE department (
 dep_id INT PRIMARY KEY,
 dep_name VARCHAR(100)
@@ -57,7 +24,27 @@ INSERT INTO  department VALUES
 (2, 'Engineering'),
 (3, 'marketing');
 
-drop table employees;
+
+/* 
+2. employees Table
+
+CREATE TABLE employees (
+
+); emp id INT PRIMARY KEY, emp name VARCHAR(180), dept id INT, salary INT
+
+INSERT INTO employees VALUES
+
+(101, 'Amit Sharma', 1, 30000),
+
+(102, 'Neha Reddy, 2, 45000),
+
+(103, 'Faizan Ali', 2, 48000),
+
+(104, 'Divya Mehta', 3, 35000),
+
+(105, 'Ravi Verma', NULL, 28000);
+*/
+
 create table employees(
 emp_id int primary key,
 emp_name varchar(100),
@@ -72,24 +59,35 @@ insert into employees values
 (104, 'Divya Mehta', 4, 35000),
 (105, 'Ravi varma' , 5, 20000);
 
+--JOIN-Based Questions
+--1. Show all employees with their department names.
+
 select e.emp_name, d.dep_name
 from employees e
 join department d on e.dep_id = d.dep_id;
+
+--2. List employees who do not belong to any department.
 
 select e.emp_name, d.dep_name
 from employees e
 join department d on e.dep_id = d.dep_id
 where d.dep_id is null;
 
+--3. Display the total number of employees in each department.
+
 select d.dep_name , count(e.emp_id) as total_employees
 from department d
 left join  employees  e on d.dep_id = e.dep_id
 group by d.dep_name;
 
+--4. Show departments with no employees.
+
 select d.dep_name
 from department d
 left join employees e on d.dep_id = e.dep_id
 where e.emp_id is null; 
+
+--5. List employee names and department names for those who earn more than 40,000.
 
 select e.emp_name , d.dep_name
 from employees e 
