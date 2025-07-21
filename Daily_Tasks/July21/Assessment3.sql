@@ -1,3 +1,30 @@
+----SQL Assessment: Design, Populate & Query-------
+
+/*
+PART 1: Design the Database
+Create the following three tables with appropriate datatypes and constraints:
+1. books
+book_id (INT, Primary Key)
+title (VARCHAR)
+author (VARCHAR)
+genre (VARCHAR)
+price (DECIMAL)
+
+2. customers
+customer_id (INT, Primary Key)
+name (VARCHAR)
+email (VARCHAR)
+city (VARCHAR)
+
+3. orders
+order_id (INT, Primary Key)
+customer_id (INT, Foreign Key → customers)
+book_id (INT, Foreign Key → books)
+order_date (DATE)
+quantity (INT)
+*/
+
+
 -- Table: books
 CREATE TABLE books (
   book_id INT PRIMARY KEY,
@@ -26,15 +53,13 @@ CREATE TABLE orders (
   FOREIGN KEY (book_id) REFERENCES books(book_id)
 );
 
-CREATE TABLE orders (
-  order_id INT PRIMARY KEY,
-  customer_id INT,
-  book_id INT,
-  order_date DATE,
-  quantity INT,
-  FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
-  FOREIGN KEY (book_id) REFERENCES books(book_id)
-);
+/*
+PART 2: Insert Sample Data
+Insert at least:
+5 books (with varied genres and prices)
+5 customers (from different cities)
+7 orders (mix of books, customers, and dates)
+*/
 
 INSERT INTO books VALUES
 (1, 'The Alchemist', 'Paulo Coelho', 'Fiction', 550.00),
@@ -52,23 +77,32 @@ INSERT INTO customers VALUES
 
 
 INSERT INTO orders VALUES 
-(1001, 101, 1, '2023-01-05', 2),
+(1001, 101, 1, '2023-01-01', 2),
 (1002, 102, 3, '2023-02-15', 1),
 (1003, 104, 2, '2023-03-10', 3),
 (1004, 105, 4, '2022-12-20', 1),
 (1005, 103, 2, '2023-05-01', 1);
 
+---------------------------PART 3: Write and Execute Queries------------------------
+--- Basic Queries
+--1. List all books with price above 500.
+
 SELECT * FROM books
 WHERE price > 500;
+
+--2. Show all customers from the city of ‘Hyderabad’.
 
 SELECT * FROM customers
 WHERE  city = 'Hyderabad';
 
+--3. Find all orders placed after ‘2023-01-01’.
+
 SELECT * FROM orders
 WHERE order_date ='2023-01-01';
-INSERT INTO orders (order_id, customer_id, book_id, order_date, quantity)
-VALUES (1008, 102, 5, '2023-01-01', 1);
 
+---------------------------Joins & Aggregations---------------------------------------
+
+--4. Show customer names along with book titles they purchased.
 
 SELECT c.name , b.title
 FROM orders o
@@ -76,17 +110,23 @@ JOIN customers c
 ON c.customer_id = o.customer_id
 JOIN books b
 ON o.book_id = b.book_id;
- 
+
+--5. List each genre and total number of books sold in that genre.
+
 SELECT b.genre, SUM(o.quantity) AS total_sold
 FROM books b
 JOIN orders o 
 ON b.book_id = o.book_id
 GROUP BY b.genre;
 
+--6. Find the total sales amount (price × quantity) for each book.
+
 SELECT b.title, SUM(b.price * o.quantity) AS total_sales_amount
 FROM books b
 JOIN orders o ON b.book_id = o.book_id
 GROUP BY b.title;
+
+--7. Show the customer who placed the highest number of orders.
 
 SELECT c.name , count(*) AS order_count
 FROM customers c
@@ -96,9 +136,13 @@ GROUP BY c.name
 ORDER BY order_count DESC
 LIMIT 1;
 
+--8. Display average price of books by genre.
+
 SELECT genre , AVG(price) AS avg_price
 FROM books
 GROUP BY genre;
+
+--9. List all books that have not been ordered.
 
 SELECT * 
 FROM books
@@ -107,6 +151,7 @@ WHERE book_id NOT IN (
     FROM orders
 );
 
+--10. Show the name of the customer who has spent the most in total.
 
 SELECT c.name , SUM( b.price * o.quantity ) AS total_spent
 FROM customers c
