@@ -25,7 +25,7 @@ quantity (INT)
 */
 
 
--- Table: books
+--  books Table
 CREATE TABLE books (
   book_id INT PRIMARY KEY,
   title VARCHAR(100),
@@ -34,7 +34,7 @@ CREATE TABLE books (
   price DECIMAL(8,2)
 );
 
--- Table: customers
+--  customers Table
 CREATE TABLE customers (
   customer_id INT PRIMARY KEY,
   name VARCHAR(100),
@@ -42,7 +42,7 @@ CREATE TABLE customers (
   city VARCHAR(50)
 );
 
--- Table: orders
+--  orders Table
 CREATE TABLE orders (
   order_id INT PRIMARY KEY,
   customer_id INT,
