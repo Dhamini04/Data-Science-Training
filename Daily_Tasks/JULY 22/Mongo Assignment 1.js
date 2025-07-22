@@ -1,7 +1,49 @@
+
+//MongoDB Practical Assignment – Bookstore Management
+
 use bookstoreDB
 switched to db bookstoreDB
 db["books"].find()
+/*PART 1: Create Collections
+Create
+1. books
+Fields:
+book_id (Number)
+title (String)
+author (String)
+genre (String)
+price (Number)
+stock (Number)
 
+
+2. customers
+Fields:
+customer_id (Number)
+name (String)
+email (String)
+city (String)
+
+3. orders
+Fields:
+order_id (Number)
+customer_id (Number)
+book_id (Number)
+order_date (ISODate)
+quantity (Number)
+
+
+􀀀 PART 2: Insert Sample Data
+Insert at least:
+5 books (mix of genres and price points)
+5 customers (different cities)
+7 orders (various combinations of books & customers)
+􀀀 Sample Insert Example:
+db.books.insertOne({
+book_id: 101,
+title: "The AI Revolution",
+author: "Ray Kurzweil",*/
+
+//books 
 db.books.insertMany([
   {
     book_id: 101,
@@ -54,6 +96,10 @@ db.books.insertMany([
     '4': ObjectId('687f139be8c4f8a17c63e0b5')
   }
 }
+
+
+//customers
+
 db.customers.insertMany([
   {
     customer_id: 201,
@@ -96,6 +142,10 @@ db.customers.insertMany([
     '4': ObjectId('687f13c6e8c4f8a17c63e0ba')
   }
 }
+
+
+//orders
+
 db.orders.insertMany([
   {
     order_id: 301,
@@ -160,6 +210,10 @@ db.orders.insertMany([
   }
 }
 
+// PART 3: Write Queries
+
+//Basic Queries:
+//1. List all books priced above 500.
 
 db.books.find({price: {$gt: 500}}); 
 {
@@ -208,6 +262,7 @@ db.books.find({price: {$gt: 500}});
   stock: 12
 }
 
+//2. Show all customers from ‘Hyderabad’.
 
 db.customers.find({city: 'Hyderabad'});
 {
@@ -225,7 +280,7 @@ db.customers.find({city: 'Hyderabad'});
   city: 'Hyderabad'
 }
 
-
+//3. Find all orders placed after January 1, 2023.
 
 db.orders.find({order_date: {$gt : ISODate("2023-01-01")}});
 {
@@ -278,8 +333,9 @@ db.orders.find({order_date: {$gt : ISODate("2023-01-01")}});
 }
 
 
+//Joins via $lookup :
 
-
+//4. Display order details with customer name and book title.
 
 db.orders.aggregate([
   {
@@ -428,7 +484,7 @@ db.orders.aggregate([
 }
 
 
-
+//5. Show total quantity ordered for each book.
 
 
 db.orders.aggregate([
@@ -457,7 +513,7 @@ db.orders.aggregate([
   total_quantity: 1
 }
 
-
+//6. Show the total number of orders placed by each customer.
 
 db.orders.aggregate([
   {
@@ -489,7 +545,8 @@ db.orders.aggregate([
 }
 
 
-
+// Aggregation Queries:
+//7. Calculate total revenue generated per book.
 
 
 db.orders.aggregate([
@@ -529,7 +586,7 @@ db.orders.aggregate([
 }
 
 
-
+//8. Find the book with the highest total revenue.
 
 
 db.orders.aggregate([
@@ -562,7 +619,7 @@ db.orders.aggregate([
 
 
 
-
+//9. List genres and total books sold in each genre.
 
 
 db.orders.aggregate([
@@ -599,8 +656,8 @@ db.orders.aggregate([
   total_sold: 3
 }
 
-
-
+//Show customers who ordered more than 2 different books.
+//added one insertion to get the desired outcome
 db.orders.insertOne({
   order_id: 308,
   customer_id: 201,
@@ -613,7 +670,7 @@ db.orders.insertOne({
   insertedId: ObjectId('687f23b8e8c4f8a17c63e0c2')
 }
 
-
+//10.Show customers who ordered more than 2 different books.
 
 db.orders.aggregate([
   {
