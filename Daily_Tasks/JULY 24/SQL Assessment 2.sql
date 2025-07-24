@@ -1,3 +1,28 @@
+/*                                     
+                                                SQL Assignment – Travel Planner
+
+Table 1: Destinations
+destination_id (Primary Key)
+city
+country
+category (Beach, Historical, Adventure, Nature)
+avg_cost_per_day
+
+ Table 2: Trips
+trip_id (Primary Key)
+destination_id (Foreign Key)
+traveler_name
+start_date
+end_date
+budget
+
+
+ Insert Sample Data
+Add at least 6 destinations across 4 different countries.
+Add 10+ trips with varying dates, travelers, and budgets.
+*/
+
+
 -- Create Tables
 
 CREATE TABLE Destinations (
