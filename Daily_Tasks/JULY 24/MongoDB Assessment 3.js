@@ -1,3 +1,6 @@
+/////////////////////      Job Portal  /////////////////////////////////////////////////
+
+
 use JobPortalDB
 switched to db JobPortalDB
 db.jobs.insertMany([
@@ -51,6 +54,9 @@ db.applications.insertMany([
     '4': ObjectId('688205f847c4cbd59931c04e')
   }
 }
+
+//1. Find all remote jobs with a salary greater than 􀀀10,00,000.
+
 db.jobs.find({ job_type: "remote", salary: { $gt: 1000000 } })
 {
   _id: ObjectId('688205c747c4cbd59931c040'),
@@ -72,6 +78,9 @@ db.jobs.find({ job_type: "remote", salary: { $gt: 1000000 } })
   job_type: 'remote',
   posted_on: 2025-07-20T00:00:00.000Z
 }
+
+//2. Get all applicants who know MongoDB.
+
 db.applicants.find({ skills: "MongoDB" })
 {
   _id: ObjectId('688205d147c4cbd59931c045'),
@@ -98,6 +107,9 @@ db.applicants.find({ skills: "MongoDB" })
   city: 'Hyderabad',
   applied_on: 2025-07-18T00:00:00.000Z
 }
+
+//3. Show the number of jobs posted in the last 30 days.
+
 db.jobs.find({
   posted_on: { $gte: new Date(new Date() - 30 * 24 * 60 * 60 * 1000) }
 })
@@ -131,6 +143,9 @@ db.jobs.find({
   job_type: 'remote',
   posted_on: 2025-07-20T00:00:00.000Z
 }
+
+//4. List all job applications that are in ‘interview scheduled’ status.
+
 db.applications.find({ application_status: "interview scheduled" })
 {
   _id: ObjectId('688205f847c4cbd59931c04a'),
@@ -150,10 +165,16 @@ db.applications.find({ application_status: "interview scheduled" })
   interview_scheduled: true,
   feedback: 'pending'
 }
+
+//5. Find companies that have posted more than 2 jobs.
+
 db.jobs.aggregate([
   { $group: { _id: "$company", jobCount: { $sum: 1 } } },
   { $match: { jobCount: { $gt: 2 } } }
 ])
+
+//6. Join applications with jobs to show job title along with the applicant’sname.
+
 db.applications.aggregate([
   {
     $lookup: {
@@ -209,6 +230,9 @@ db.applications.aggregate([
   job_title: 'Data Scientist',
   applicant_name: 'Anjali Rao'
 }
+
+//7. Find how many applications each job has received.
+
 db.applications.aggregate([
   { $group: { _id: "$job_id", totalApplications: { $sum: 1 } } }
 ])
@@ -224,6 +248,10 @@ db.applications.aggregate([
   _id: 2,
   totalApplications: 2
 }
+
+
+//8. List applicants who have applied for more than one job.
+
 db.applications.aggregate([
   { $group: { _id: "$applicant_id", jobCount: { $sum: 1 } } },
   { $match: { jobCount: { $gt: 1 } } }
@@ -232,6 +260,10 @@ db.applications.aggregate([
   _id: 1,
   jobCount: 2
 }
+
+
+//9. Show the top 3 cities with the most applicant
+
 db.applicants.aggregate([
   { $group: { _id: "$city", total: { $sum: 1 } } },
   { $sort: { total: -1 } },
@@ -249,6 +281,10 @@ db.applicants.aggregate([
   _id: 'Pune',
   total: 1
 }
+
+
+//10. Get the average salary for each job type (remote, hybrid, on-site)
+
 db.jobs.aggregate([
   { $group: { _id: "$job_type", avgSalary: { $avg: "$salary" } } }
 ])
@@ -264,6 +300,9 @@ db.jobs.aggregate([
   _id: 'remote',
   avgSalary: 1250000
 }
+
+// 11. Update the status of one application to "offer made".
+
 db.applications.updateOne(
   { application_id: 102 },
   { $set: { application_status: "offer made" } }
@@ -276,11 +315,17 @@ db.applications.updateOne(
   upsertedCount: 0
 }
 const jobIdsWithApps = db.applications.distinct("job_id");
+
+//12. Delete a job that has not received any applications.
+
 db.jobs.deleteMany({ job_id: { $nin: jobIdsWithApps } });
 {
   acknowledged: true,
   deletedCount: 2
 }
+
+//13. Add a new field shortlisted to all applications and set it to false.
+
 db.applications.updateMany({}, { $set: { shortlisted: false } })
 {
   acknowledged: true,
@@ -289,6 +334,9 @@ db.applications.updateMany({}, { $set: { shortlisted: false } })
   modifiedCount: 5,
   upsertedCount: 0
 }
+
+//14. Increment experience of all applicants from "Hyderabad" by 1 year.
+
 db.applicants.updateMany(
   { city: "Hyderabad" },
   { $inc: { experience: 1 } }
@@ -301,6 +349,10 @@ db.applicants.updateMany(
   upsertedCount: 0
 }
 const appliedApplicantIds = db.applications.distinct("applicant_id");
+
+// 15. Remove all applicants who haven’t applied to any job.
+
+
 db.applicants.deleteMany({ applicant_id: { $nin: appliedApplicantIds } });
 {
   acknowledged: true,
