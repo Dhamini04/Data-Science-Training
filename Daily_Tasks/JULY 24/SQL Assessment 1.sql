@@ -1,3 +1,24 @@
+/* 
+                                   SQL Assignment – Personal Fitness Tracker 
+Table 1: Exercises
+exercise_id (Primary Key)
+exercise_name
+category (e.g., Cardio, Strength, Flexibility)
+calories_burn_per_min
+
+ Table 2: WorkoutLog
+log_id (Primary Key)
+exercise_id (Foreign Key)
+date
+duration_min (minutes)
+mood (e.g., Energized, Tired, Normal)
+
+ Insert Sample Data
+Insert at least 5 different exercises.
+Log at least 2 workouts per exercise across different days.
+*/
+
+
 CREATE TABLE Exercises (
     exercise_id INT PRIMARY KEY,
     exercise_name VARCHAR(50),
