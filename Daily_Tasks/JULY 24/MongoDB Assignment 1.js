@@ -1,3 +1,6 @@
+////////////////////MongoDB Assignment: E-Commerce Store Analytics//////////////////////////////
+
+
 use E-CommerceStoreDB
 switched to db E-CommerceStoreDB
 db.products.insertMany([
@@ -34,6 +37,9 @@ db.orders.insertMany([
     '4': ObjectId('6881fa945088b7525f2970f0')
   }
 }
+
+//1. List all products in the Electronics category
+
 db.products.find({ category: "Electronics" });
 {
   _id: ObjectId('6881fa7c5088b7525f2970e7'),
@@ -51,6 +57,9 @@ db.products.find({ category: "Electronics" });
   price: 2200,
   stock: 80
 }
+
+//2. Find all orders placed by Ravi Shah
+
 db.orders.find({ customer: "Ravi Shah" });
 {
   _id: ObjectId('6881fa945088b7525f2970ec'),
@@ -60,6 +69,9 @@ db.orders.find({ customer: "Ravi Shah" });
   quantity: 2,
   order_date: 2024-07-01T00:00:00.000Z
 }
+
+//3. Show all orders placed after July 2, 2024
+
 db.orders.find({ order_date: { $gt: new Date("2024-07-02") } });
 {
   _id: ObjectId('6881fa945088b7525f2970ee'),
@@ -85,6 +97,9 @@ db.orders.find({ order_date: { $gt: new Date("2024-07-02") } });
   quantity: 2,
   order_date: 2024-07-05T00:00:00.000Z
 }
+
+//4. Display the product with stock less than 50
+
 db.products.find({ stock: { $lt: 50 } });
 {
   _id: ObjectId('6881fa7c5088b7525f2970ea'),
@@ -94,6 +109,9 @@ db.products.find({ stock: { $lt: 50 } });
   price: 7500,
   stock: 40
 }
+
+//5. Show all products that cost more than ₹2000
+
 db.products.find({ price: { $gt: 2000 } });
 {
   _id: ObjectId('6881fa7c5088b7525f2970e8'),
@@ -119,6 +137,9 @@ db.products.find({ price: { $gt: 2000 } });
   price: 3500,
   stock: 60
 }
+
+//6. Use $lookup to show each order with product name and price
+
 db.orders.aggregate([
   {
     $lookup: {
@@ -187,6 +208,10 @@ db.orders.aggregate([
   product: 'Running Shoes',
   price: 3500
 }
+
+//7. Find total amount spent by each customer (price × quantity)
+
+
 db.orders.aggregate([
   {
     $lookup: {
@@ -241,6 +266,10 @@ db.orders.aggregate([
   order_date: 2024-07-05T00:00:00.000Z,
   category: 'Footwear'
 }
+
+
+//8. List all orders along with category of the product.
+
 db.orders.aggregate([
   {
     $lookup: {
@@ -257,6 +286,10 @@ db.orders.aggregate([
 {
   _id: 'Arjun Verma'
 }
+
+//9. Find customers who ordered any Fitness product
+
+
 db.orders.aggregate([
   {
     $lookup: {
@@ -273,6 +306,10 @@ db.orders.aggregate([
 {
   _id: 'Arjun Verma'
 }
+
+//10. Find the total sales per product category
+
+
 db.orders.aggregate([
   {
     $lookup: {
