@@ -1,3 +1,6 @@
+//////////////////////  Library Management SYSTEM ///////////////////////////////
+
+
 use LibraryManagementDB
 switched to db LibraryManagementDB
 db.books.insertMany([
@@ -54,6 +57,10 @@ returned: true }
     '3': ObjectId('6881ffb1ba4d0cb789f4465d')
   }
 }
+
+
+// 1. Find all books in the Self-Help genre
+
 db.books.find({ genre: "Self-Help" });
 {
   _id: ObjectId('6881ff96ba4d0cb789f44653'),
@@ -63,6 +70,10 @@ db.books.find({ genre: "Self-Help" });
   genre: 'Self-Help',
   copies: 5
 }
+
+
+// 2. Show members who joined after March 2024
+
 db.members.find({ joined_on: { $gt: new Date("2024-03-31") } });
 {
   _id: ObjectId('6881ffa4ba4d0cb789f44659'),
@@ -70,6 +81,10 @@ db.members.find({ joined_on: { $gt: new Date("2024-03-31") } });
   name: 'Nikita Rao',
   joined_on: 2024-04-10T00:00:00.000Z
 }
+
+// 3. List all borrowed books that have not been returned.
+
+
 db.borrowed.find({ returned: false });
 {
   _id: ObjectId('6881ffb1ba4d0cb789f4465b'),
@@ -87,6 +102,9 @@ db.borrowed.find({ returned: false });
   date: 2024-06-20T00:00:00.000Z,
   returned: false
 }
+
+// 4. Display all books with fewer than 5 copies in stock.
+
 db.books.find({ copies: { $lt: 5 } });
 {
   _id: ObjectId('6881ff96ba4d0cb789f44655'),
@@ -104,6 +122,9 @@ db.books.find({ copies: { $lt: 5 } });
   genre: 'Productivity',
   copies: 4
 }
+
+// 5. Get details of all books written by Cal Newport.
+
 db.books.find({ author: "Cal Newport" });
 {
   _id: ObjectId('6881ff96ba4d0cb789f44656'),
@@ -113,6 +134,9 @@ db.books.find({ author: "Cal Newport" });
   genre: 'Productivity',
   copies: 4
 }
+
+// 6. List all borrow records with book title and member name
+
 db.borrowed.aggregate([
   {
     $lookup: {
@@ -204,6 +228,9 @@ db.borrowed.aggregate([
     }
   ]
 }
+
+// 7. Find which member borrowed "Sapiens"
+
 db.borrowed.aggregate([
   {
     $lookup: {
@@ -236,7 +263,9 @@ db.borrowed.aggregate([
   member_name: 'Ayesha Khan',
   book_title: 'Sapiens'
 }
- 
+
+// 8. Display all members along with the books they've borrowed
+
 db.members.aggregate([
   {
     $lookup: {
@@ -303,6 +332,9 @@ db.members.aggregate([
     }
   ]
 }
+
+// 9. Get a list of members who have borrowed books and not returned them
+
 db.borrowed.aggregate([
   { $match: { returned: false } },
   {
@@ -328,6 +360,10 @@ db.borrowed.aggregate([
 {
   _id: 'Rahul Verma'
 }
+
+// 10. Show each book along with how many times it has been borrowed
+
+
 db.borrowed.aggregate([
   {
     $group: {
@@ -371,6 +407,11 @@ db.borrowed.aggregate([
   borrow_count: 1,
   book_title: 'The Alchemist'
 }
+
+
+// 11. Count how many books each member has borrowed
+
+
 db.borrowed.aggregate([
   {
     $group: {
@@ -409,6 +450,9 @@ db.borrowed.aggregate([
   total_borrowed: 2,
   member_name: 'Ayesha Khan'
 }
+
+// 12. Which genre has the highest number of books?
+
 db.books.aggregate([
   {
     $group: {
@@ -423,6 +467,9 @@ db.books.aggregate([
   _id: 'Fiction',
   total_books: 10
 }
+
+// 13. List the top 2 most borrowed books
+
 db.borrowed.aggregate([
   {
     $group: {
@@ -460,6 +507,9 @@ db.borrowed.aggregate([
   borrow_count: 1,
   book_title: 'The Lean Startup'
 }
+
+// 14. Show the average number of copies available per genre
+
 db.books.aggregate([
   {
     $group: {
@@ -488,6 +538,9 @@ db.books.aggregate([
   _id: 'Self-Help',
   avg_copies: 5
 }
+
+// 15. Find the total number of books currently borrowed (not returned)
+
 db.borrowed.aggregate([
   { $match: { returned: false } },
   {
@@ -497,6 +550,10 @@ db.borrowed.aggregate([
 {
   currently_borrowed_books: 2
 }
+
+
+//// 16. Add a new member who hasn't borrowed any book
+
 db.members.insertOne({
   member_id: 104,
   name: "Priya Sen",
@@ -506,6 +563,10 @@ db.members.insertOne({
   acknowledged: true,
   insertedId: ObjectId('68820121ba4d0cb789f4465e')
 }
+
+
+// Query: List members who haven't borrowed any books
+
 db.members.aggregate([
   {
     $lookup: {
@@ -524,6 +585,10 @@ db.members.aggregate([
   joined_on: 2024-07-15T00:00:00.000Z,
   borrows: []
 }
+
+
+// 17. Identify books that have never been borrowed
+
 db.books.aggregate([
   {
     $lookup: {
@@ -544,6 +609,10 @@ db.books.aggregate([
   copies: 4,
   borrows: []
 }
+
+
+// 18. Get the name of members who borrowed more than one book
+
 db.borrowed.aggregate([
   {
     $group: {
@@ -573,6 +642,10 @@ db.borrowed.aggregate([
   borrow_count: 2,
   member_name: 'Ayesha Khan'
 }
+
+// 19. Display borrowing trends by month (group by month
+
+
 db.borrowed.aggregate([
   {
     $group: {
@@ -593,6 +666,9 @@ db.borrowed.aggregate([
   borrow_count: 4,
   month: 6
 }
+
+// 20. Show borrow records where the borrowed book had fewer than 5 copies at the time.
+
 db.borrowed.aggregate([
   {
     $lookup: {
