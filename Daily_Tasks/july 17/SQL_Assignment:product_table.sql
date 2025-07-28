@@ -1,3 +1,4 @@
+
 /*--SQL Assignment: products Table
 
 Task 1: Create a Table
