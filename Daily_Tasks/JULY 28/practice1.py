@@ -36,7 +36,7 @@ cursor = conn.cursor()
 # conn.commit()
 
 
-# ✅ Step 4: UPDATE a record (e.g., change salary for 'Priya Verma')
+#  Step 4: UPDATE a record (e.g., change salary for 'Priya Verma')
 update_query = """
 UPDATE employees
 SET salary = 65000
@@ -45,7 +45,7 @@ WHERE name = 'Priya Verma';
 cursor.execute(update_query)
 print("Updated Priya Verma's salary successfully")
 
-# ✅ Step 5: DELETE a record (e.g., remove 'Anil Kapoor')
+#  Step 5: DELETE a record (e.g., remove 'Anil Kapoor')
 delete_query = """
 DELETE FROM employees
 WHERE name = 'Anil Kapoor';
